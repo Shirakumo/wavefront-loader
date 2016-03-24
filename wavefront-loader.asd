@@ -14,6 +14,7 @@
   :homepage "https://github.com/Shirakumo/wavefront-loader"
   :serial T
   :components ((:file "package")
+               (:file "toolkit")
                (:file "material")
                (:file "geometry")
                (:file "loader")
