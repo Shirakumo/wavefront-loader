@@ -6,6 +6,13 @@
 
 (in-package #:org.shirakumo.fraf.trial.wavefront-loader)
 
+(defun skip-line (in)
+  (loop for char = (read-char in NIL NIL)
+        while char
+        until (or (char= char #\Linefeed)
+                  (and (char= char #\Return)
+                       (not (char= char #\Linefeed (peek-char NIL in)))))))
+
 (defun read-wavefront-line (in)
   (when (peek-char T in)
     (with-output-to-string (out)
@@ -27,6 +34,9 @@
                       (return))
                      ((char= char #\\)
                       (setf escaped T))
+                     ((char= char #\#)
+                      (skip-line in)
+                      (return))
                      (T
                       (write-char char out)))))))
 
@@ -107,7 +117,6 @@
       (loop for line = (read-wavefront-line stream)
             while line
             do (with-processing-case line
-                 ("#")
                  (("mtllib (.*)" files)
                   ;; Need to load in reverse so that earlier files override later ones.
                   (loop for file in (reverse (cl-ppcre:split " +" files))
