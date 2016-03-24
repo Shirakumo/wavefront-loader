@@ -17,32 +17,25 @@
   (when (peek-char T in NIL NIL)
     (string-trim '(#\Space #\Tab)
                  (with-output-to-string (out)
-                   (loop with escaped = NIL
-                         for char = (read-char in NIL NIL)
+                   (loop for char = (read-char in NIL NIL)
                          while char
-                         do (if escaped
-                                (case char
-                                  (#\Return
-                                   (unless (char= (peek-char NIL in) #\Linefeed)
-                                     (setf escaped NIL)))
-                                  (#\Linefeed
-                                   (setf escaped NIL))
-                                  (T
-                                   (setf escaped NIL)
-                                   (write-char char out)))
-                                (case char
-                                  (#\Return
-                                   (unless (char= (peek-char NIL in) #\Linefeed)
-                                     (return)))
-                                  (#\Linefeed
-                                   (return))
-                                  (#\\
-                                   (setf escaped T))
-                                  (#\#
-                                   (skip-line in)
-                                   (return))
-                                  (T
-                                   (write-char char out)))))))))
+                         do (case char
+                              ((#\Linefeed #\Return)
+                               (return))
+                              (#\\
+                               (let ((char (read-char in)))
+                                 (case char
+                                   (#\Linefeed)
+                                   (#\Return ; Special case handling for CRLF skipping
+                                    (when (char= (peek-char NIL in) #\Linefeed)
+                                      (read-char in)))
+                                   (T
+                                    (write-char char out)))))
+                              (#\#
+                               (skip-line in)
+                               (return))
+                              (T
+                               (write-char char out))))))))
 
 (defmacro with-processing-case (line &body commands)
   (let ((l (gensym "LINE")))
