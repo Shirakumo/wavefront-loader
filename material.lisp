@@ -12,4 +12,10 @@
   (intern (string-upcase thing) "KEYWORD"))
 
 (defclass material ()
-  (name))
+  ((name :initarg :name :accessor name))
+  (:default-initargs
+   :name (error "NAME required.")))
+
+(defmethod print-object ((material material) stream)
+  (print-unreadable-object (material stream :type T)
+    (format stream "~s" (name material))))

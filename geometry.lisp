@@ -66,6 +66,10 @@
    :geometry (mkarray '(or null renderable))
    :name NIL))
 
+(defmethod print-object ((mesh mesh) stream)
+  (print-unreadable-object (mesh stream :type T :identity T)
+    (format stream "~@[~a~]" (name mesh))))
+
 (defmethod draw ((mesh mesh))
   (loop for geom across geometry
         do (draw geom)))
