@@ -46,11 +46,10 @@
     `(let ((,l ,line))
        (or ,@(loop for (command . body) in commands
                    for (regex . args) = (if (listp command) command (list command))
-                   collect (case regex
-                             ((T :otherwise) `(progn ,@body T))
-                             (T `(cl-ppcre:register-groups-bind ,args (,(format NIL "^~a$" regex) ,l)
-                                   ,@body
-                                   T))))))))
+                   collect `(cl-ppcre:register-groups-bind ,args (,(format NIL "^~a$" regex) ,l)
+                              ,@body
+                              T))
+           (warn "Unparseable line ~s" ,l)))))
 
 (defun parse-vec (x y z)
   (vec (if x (parse-float:parse-float x) 0.0)
@@ -127,9 +126,9 @@
                  (("usemtl ([^ ]+)" material)
                   (setf material (or (gethash (materialname material) materials)
                                      (error "No such material ~s!" material))))
-                 (("v ([0-9.]+) ([0-9.]+) ([0-9.]+)" x y z)
+                 (("v (-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)" x y z)
                   (add (parse-vec x y z) vertices))
-                 (("vn ([0-9.]+) ([0-9.]+) ([0-9.]+)" x y z)
+                 (("vn (-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)" x y z)
                   (add (parse-vec x y z) normals))
                  (("vt ([0-9.]+)( ([0-9.]+)( ([0-9.]+))?)?" x NIL y NIL z)
                   (add (parse-vec x y z) textures))
