@@ -71,5 +71,5 @@
     (format stream "~@[~a~]" (name mesh))))
 
 (defmethod draw ((mesh mesh))
-  (loop for geom across geometry
+  (loop for geom across (geometry mesh)
         do (draw geom)))
