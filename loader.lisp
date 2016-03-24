@@ -20,26 +20,29 @@
                    (loop with escaped = NIL
                          for char = (read-char in NIL NIL)
                          while char
-                         do (cond ((and escaped (char= char #\Return))
+                         do (if escaped
+                                (case char
+                                  (#\Return
                                    (unless (char= (peek-char NIL in) #\Linefeed)
                                      (setf escaped NIL)))
-                                  ((and escaped (char= char #\Linefeed))
+                                  (#\Linefeed
                                    (setf escaped NIL))
-                                  (escaped
+                                  (T
                                    (setf escaped NIL)
-                                   (write-char char out))
-                                  ((char= char #\Return)
+                                   (write-char char out)))
+                                (case char
+                                  (#\Return
                                    (unless (char= (peek-char NIL in) #\Linefeed)
                                      (return)))
-                                  ((char= char #\Linefeed)
+                                  (#\Linefeed
                                    (return))
-                                  ((char= char #\\)
+                                  (#\\
                                    (setf escaped T))
-                                  ((char= char #\#)
+                                  (#\#
                                    (skip-line in)
                                    (return))
                                   (T
-                                   (write-char char out))))))))
+                                   (write-char char out)))))))))
 
 (defmacro with-processing-case (line &body commands)
   (let ((l (gensym "LINE")))
