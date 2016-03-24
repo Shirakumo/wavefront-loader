@@ -51,7 +51,12 @@
    :normals (mkarray '(or null vec))))
 
 (defmethod draw ((face face))
-  (gl:with-primitives :triangles
+  (gl:with-primitives (case (length (vertices face))
+                        (1 :points)
+                        (2 :lines)
+                        (3 :triangles)
+                        (4 :quads)
+                        (5 :triangle-strip))
     (loop for texture across (textures face)
           for normal across (normals face)
           for vertex across (vertices face)
