@@ -76,14 +76,16 @@
       (load-mtl stream))))
 
 (defmethod load-mtl ((stream stream))
-  (let ((materials (make-hash-table :test 'eql)))
+  (let ((materials (make-hash-table :test 'eql))
+        (material NIL))
     (loop for line = (read-wavefront-line stream)
           while line
           do (with-processing-case line
                ("")
                (("newmtl ([^ ]+)" name)
                 (let ((name (materialname name)))
-                  (setf (gethash name materials) (make-instance 'material :name name))))))
+                  (setf material (make-instance 'material :name name))
+                  (setf (gethash name materials) material)))))
 
     materials))
 
