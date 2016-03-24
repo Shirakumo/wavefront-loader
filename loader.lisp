@@ -75,10 +75,12 @@
           while line
           do (with-processing-case line
                ("")
-               (("newmtl ([^ ]+)" name)
+               (("newmtl +([^ ]+)" name)
                 (let ((name (materialname name)))
                   (setf material (make-instance 'material :name name))
-                  (setf (gethash name materials) material)))))
+                  (setf (gethash name materials) material)))
+               (("map_Kd +(.*)" file)
+                (setf (diffuse material) (merge-pathnames file (pathname stream))))))
 
     materials))
 
