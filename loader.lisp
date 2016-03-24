@@ -74,7 +74,13 @@
 
 (defmethod load-mtl ((stream stream))
   (let ((materials (make-hash-table :test 'eql)))
-    
+    (loop for line = (read-wavefront-line stream)
+          while line
+          do (with-processing-case line
+               ("")
+               (("newmtl ([^ ]+)" name)
+                (let ((name (materialname name)))
+                  (setf (gethash name materials) (make-instance 'material :name name))))))
 
     materials))
 
@@ -153,6 +159,5 @@
                                          (add normal (normals face))))
                     (add face (geometry (mesh)))))
                  (("g (.*)" name)
-                  (add-mesh name))
-                 (T (warn "Unparseable line ~s" line)))))
+                  (add-mesh name)))))
     meshes))
