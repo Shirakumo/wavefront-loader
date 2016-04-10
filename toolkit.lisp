@@ -14,3 +14,11 @@
         for v being the hash-values of table
         do (setf (gethash k target) v))
   target)
+
+(defmacro with-primitives (primitive &body body)
+  (let ((prim (gensym "PRIMITIVE")))
+    `(let ((,prim ,primitive))
+       (gl:begin ,prim)
+       (unwind-protect
+            (progn ,@body)
+         (gl:end ,prim)))))

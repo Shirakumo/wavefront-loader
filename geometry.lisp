@@ -23,7 +23,7 @@
    :vertices (mkarray '(or null vec))))
 
 (defmethod draw ((point point))
-  (gl:with-primitives :points
+  (with-primitives :points
     (loop for vertex across (vertices point)
           do (gl:vertex (vx vertex) (vy vertex) (vz vertex)))))
 
@@ -35,7 +35,7 @@
    :textures (mkarray '(or null vec))))
 
 (defmethod draw ((line line))
-  (gl:with-primitives :lines
+  (with-primitives :lines
     (loop for texture across (textures line)
           for vertex across (vertices line)
           do (gl:tex-coord (vx texture) (vy texture) (vz texture))
@@ -51,7 +51,7 @@
    :normals (mkarray '(or null vec))))
 
 (defmethod draw ((face face))
-  (gl:with-primitives (case (length (vertices face))
+  (with-primitives (case (length (vertices face))
                         (1 :points)
                         (2 :lines)
                         (3 :triangles)
