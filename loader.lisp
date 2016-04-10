@@ -138,7 +138,7 @@
                   (add (parse-vec x y z) vertices))
                  (("vn +(-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)" x y z)
                   (add (parse-vec x y z) normals))
-                 (("vt +([0-9.]+)( ([0-9.]+)( ([0-9.]+))?)?" x NIL y NIL z)
+                 (("vt +(-?[0-9.]+)( (-?[0-9.]+)( (-?[0-9.]+))?)?" x NIL y NIL z)
                   (add (parse-vec x y z) textures))
                  (("p(( +-?[0-9]+)+)" refspecs NIL)
                   (let ((point (make-instance 'point)))
