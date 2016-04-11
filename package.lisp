@@ -7,4 +7,32 @@
 (in-package #:cl-user)
 (defpackage #:wavefront-loader
   (:nicknames #:org.shirakumo.fraf.trial.wavefront-loader)
-  (:use #:cl #:3d-vectors))
+  (:use #:cl #:3d-vectors)
+  ;; geometry.lisp
+  (:export
+   #:draw
+   #:renderable
+   #:material
+   #:point
+   #:vertices
+   #:line
+   #:vertices
+   #:textures
+   #:face
+   #:vertices
+   #:textures
+   #:normals
+   #:mesh
+   #:geometry
+   #:name)
+  ;; loader.lisp
+  (:export
+   #:load-mtl
+   #:load-obj)
+  ;; material.lisp
+  (:export
+   #:activate
+   #:deactivate
+   #:material
+   #:name
+   #:diffuse))
