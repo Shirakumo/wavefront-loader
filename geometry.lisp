@@ -13,9 +13,13 @@
   (:default-initargs
    :material NIL))
 
-(defmethod draw :before ((renderable renderable))
-  (when (material renderable)
-    (activate (material renderable))))
+(defmethod draw :around ((renderable renderable))
+  (cond ((material renderable)
+         (activate (material renderable))
+         (call-next-method)
+         (deactivate (material renderable)))
+        (T
+         (call-next-method))))
 
 (defclass point (renderable)
   ((vertices :initarg :vertices :accessor vertices))

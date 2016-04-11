@@ -7,6 +7,7 @@
 (in-package #:org.shirakumo.fraf.trial.wavefront-loader)
 
 (defgeneric activate (material))
+(defgeneric deactivate (material))
 
 (defun materialname (thing)
   (intern (string-upcase thing) "KEYWORD"))
@@ -28,3 +29,7 @@
     (gl:tex-parameter :texture-2d :texture-mag-filter :linear)
     (gl:tex-parameter :texture-2d :texture-wrap-s :clamp)
     (gl:tex-parameter :texture-2d :texture-wrap-t :clamp)))
+
+(defmethod deactivate ((material material))
+  (when (diffuse material)
+    (gl:bind-texture :texture-2d 0)))
