@@ -79,8 +79,10 @@
                 (let ((name (materialname name)))
                   (setf material (make-instance 'material :name name))
                   (setf (gethash name materials) material)))
+               (("Kd +(-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)" x y z)
+                (setf (diffuse material) (parse-vec x y z)))
                (("map_Kd +(.*)" file)
-                (setf (diffuse material) (merge-pathnames file (pathname stream))))))
+                (setf (diffuse-map material) (merge-pathnames file (pathname stream))))))
 
     materials))
 

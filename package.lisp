@@ -35,4 +35,5 @@
    #:deactivate
    #:material
    #:name
+   #:diffuse-map
    #:diffuse))

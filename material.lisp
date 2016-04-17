@@ -14,22 +14,29 @@
 
 (defclass material ()
   ((name :initarg :name :accessor name)
+   (diffuse-map :initarg :diffuse-map :accessor diffuse-map)
    (diffuse :initarg :diffuse :accessor diffuse))
   (:default-initargs
-   :name (error "NAME required.")))
+   :name (error "NAME required.")
+   :diffuse-map NIL
+   :diffuse NIL))
 
 (defmethod print-object ((material material) stream)
   (print-unreadable-object (material stream :type T)
     (format stream "~s" (name material))))
 
 (defmethod activate ((material material))
-  (when (diffuse material)
-    (gl:bind-texture :texture-2d (diffuse material))
+  (when (diffuse-map material)
+    (gl:bind-texture :texture-2d (diffuse-map material))
     (gl:tex-parameter :texture-2d :texture-min-filter :linear)
     (gl:tex-parameter :texture-2d :texture-mag-filter :linear)
     (gl:tex-parameter :texture-2d :texture-wrap-s :clamp)
-    (gl:tex-parameter :texture-2d :texture-wrap-t :clamp)))
+    (gl:tex-parameter :texture-2d :texture-wrap-t :clamp))
+  (when (diffuse material)
+    (gl:color (vx (diffuse material))
+              (vy (diffuse material))
+              (vz (diffuse material)))))
 
 (defmethod deactivate ((material material))
-  (when (diffuse material)
+  (when (diffuse-map material)
     (gl:bind-texture :texture-2d 0)))
