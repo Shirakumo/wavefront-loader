@@ -10,7 +10,9 @@
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description ""
-  :homepage "https://github.com/Shirakumo/wavefront-loader"
+  :homepage "https://Shirakumo.github.io/wavefront-loader/"
+  :bug-tracker "https://github.com/Shirakumo/wavefront-loader/issues"
+  :source-control (:git "https://github.com/Shirakumo/wavefront-loader.git")
   :serial T
   :components ((:file "package")
                (:file "toolkit")
